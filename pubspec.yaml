@@ -1,6 +1,6 @@
-name: san_rafael_contigo_modulos
-description: A new Flutter package project.
-version: 0.0.1
+name: csr_modules
+description: Modulos compartidos San Rafael Contigo
+version: 0.0.2
 homepage:
 publish_to: "none"
 
