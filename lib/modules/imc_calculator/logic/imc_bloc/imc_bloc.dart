@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 
-import '/imc_calculator/models/imc_table.dart';
-import '/imc_calculator/models/imc_indicator.dart';
+import '/modules/imc_calculator/models/imc_table.dart';
+import '/modules/imc_calculator/models/imc_indicator.dart';
 
 part 'imc_state.dart';
 part 'imc_event.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/imc_calculator/models/imc_indicator.dart';
+import '/modules/imc_calculator/models/imc_indicator.dart';
 
 class GenderSelector extends StatefulWidget {
   const GenderSelector({

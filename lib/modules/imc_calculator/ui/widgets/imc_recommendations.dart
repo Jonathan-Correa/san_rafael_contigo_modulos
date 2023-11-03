@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:csr_design_system/csr_design_system.dart';
 
-import '/imc_calculator/models/imc_indicator.dart';
-import '/imc_calculator/logic/imc_bloc/imc_bloc.dart';
+import '/modules/imc_calculator/models/imc_indicator.dart';
+import '/modules/imc_calculator/logic/imc_bloc/imc_bloc.dart';
 
 class IMCRecommendations extends StatelessWidget {
   const IMCRecommendations({Key? key}) : super(key: key);

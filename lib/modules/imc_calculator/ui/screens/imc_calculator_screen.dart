@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:csr_design_system/csr_design_system.dart';
 
-import '/imc_calculator/models/imc_indicator.dart';
-import '/imc_calculator/logic/imc_bloc/imc_bloc.dart';
-import '/imc_calculator/ui/widgets/imc_categories.dart';
-import '/imc_calculator/ui/widgets/gender_selector.dart';
-import '/imc_calculator/ui/widgets/imc_recommendations.dart';
+import '/modules/imc_calculator/models/imc_indicator.dart';
+import '/modules/imc_calculator/logic/imc_bloc/imc_bloc.dart';
+import '/modules/imc_calculator/ui/widgets/imc_categories.dart';
+import '/modules/imc_calculator/ui/widgets/gender_selector.dart';
+import '/modules/imc_calculator/ui/widgets/imc_recommendations.dart';
 
 class IMCCalculatorScreen extends StatelessWidget {
   const IMCCalculatorScreen({

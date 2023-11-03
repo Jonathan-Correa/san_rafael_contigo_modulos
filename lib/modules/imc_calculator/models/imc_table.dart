@@ -1,4 +1,4 @@
-import '/imc_calculator/models/imc_indicator.dart';
+import '/modules/imc_calculator/models/imc_indicator.dart';
 
 class ImcTable {
   List<ImcIndicator> men = [
