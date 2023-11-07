@@ -13,6 +13,7 @@ class NewsPage extends StatelessWidget {
     super.key,
     required this.apiUrl,
     required this.apiToken,
+    required this.userToken,
     required this.loadingScreen,
     required this.onSessionExpired,
     required this.onRedirectToDetailScreen,
@@ -20,6 +21,7 @@ class NewsPage extends StatelessWidget {
 
   final String apiUrl;
   final String apiToken;
+  final String userToken;
   final Widget loadingScreen;
   final Function(BuildContext context) onSessionExpired;
   final Function(int newId) onRedirectToDetailScreen;
@@ -31,6 +33,7 @@ class NewsPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) {
           return NewsBloc(
+            userToken: userToken,
             newsService: NewsService(apiToken: apiToken, apiUrl: apiUrl),
           )..add(const GetNews());
         },
