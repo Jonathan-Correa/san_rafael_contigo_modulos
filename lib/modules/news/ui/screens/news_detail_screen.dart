@@ -30,7 +30,10 @@ class NewsDetailScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) {
           return NewsBloc(
-            newsService: NewsService(apiToken: params.userToken),
+            newsService: NewsService(
+              apiToken: params.apiToken,
+              apiUrl: params.apiUrl,
+            ),
           )..add(GetNewById(params.newId, params.userToken));
         },
         child: _NewsDetailView(

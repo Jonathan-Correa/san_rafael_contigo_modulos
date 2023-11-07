@@ -11,12 +11,14 @@ import '/modules/news/ui/widgets/large_card_news.dart';
 class NewsPage extends StatelessWidget {
   const NewsPage({
     super.key,
+    required this.apiUrl,
     required this.apiToken,
     required this.loadingScreen,
     required this.onSessionExpired,
     required this.onRedirectToDetailScreen,
   });
 
+  final String apiUrl;
   final String apiToken;
   final Widget loadingScreen;
   final Function(BuildContext context) onSessionExpired;
@@ -29,7 +31,7 @@ class NewsPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) {
           return NewsBloc(
-            newsService: NewsService(apiToken: apiToken),
+            newsService: NewsService(apiToken: apiToken, apiUrl: apiUrl),
           )..add(const GetNews());
         },
         child: Padding(
