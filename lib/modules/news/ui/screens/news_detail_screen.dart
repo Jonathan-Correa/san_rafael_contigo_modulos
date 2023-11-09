@@ -1,3 +1,4 @@
+import 'package:csr_shared_modules/config/csr_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,12 +15,14 @@ class NewsDetailScreen extends StatelessWidget {
   const NewsDetailScreen({
     Key? key,
     required this.params,
+    required this.preferences,
     required this.loadingScreen,
     required this.onTapDetailUrl,
     required this.onSessionExpired,
   }) : super(key: key);
 
   final Widget loadingScreen;
+  final CsrPreferences preferences;
   final NewDetailScreenParams params;
   final Function(String url) onTapDetailUrl;
   final Function(BuildContext context) onSessionExpired;
@@ -30,12 +33,12 @@ class NewsDetailScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) {
           return NewsBloc(
-            userToken: params.userToken,
             newsService: NewsService(
               apiToken: params.apiToken,
               apiUrl: params.apiUrl,
+              preferences: preferences,
             ),
-          )..add(GetNewById(params.newId, params.userToken));
+          )..add(GetNewById(params.newId));
         },
         child: _NewsDetailView(
           params: params,
@@ -88,9 +91,7 @@ class _NewsDetailView extends StatelessWidget {
           return ErrorMessageWidget(
             message: error.message,
             onRefresh: error.shouldRetry
-                ? () => context
-                    .read<NewsBloc>()
-                    .add(GetNewById(params.newId, params.userToken))
+                ? () => context.read<NewsBloc>().add(GetNewById(params.newId))
                 : null,
           );
         }

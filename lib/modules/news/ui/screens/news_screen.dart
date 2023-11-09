@@ -1,7 +1,8 @@
-import 'package:csr_design_system/widgets/csr_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:csr_design_system/widgets/csr_appbar.dart';
 
+import '/config/csr_preferences.dart';
 import '/widgets/error_message_widget.dart';
 import '/modules/news/logic/news/news_bloc.dart';
 import '/modules/news/services/news_service.dart';
@@ -13,7 +14,7 @@ class NewsPage extends StatelessWidget {
     super.key,
     required this.apiUrl,
     required this.apiToken,
-    required this.userToken,
+    required this.preferences,
     required this.loadingScreen,
     required this.onSessionExpired,
     required this.onRedirectToDetailScreen,
@@ -21,29 +22,29 @@ class NewsPage extends StatelessWidget {
 
   final String apiUrl;
   final String apiToken;
-  final String userToken;
+  final CsrPreferences preferences;
   final Widget loadingScreen;
   final Function(BuildContext context) onSessionExpired;
   final Function(int newId) onRedirectToDetailScreen;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CsrAppBar(),
-      body: BlocProvider(
-        create: (context) {
-          return NewsBloc(
-            userToken: userToken,
-            newsService: NewsService(apiToken: apiToken, apiUrl: apiUrl),
-          )..add(const GetNews());
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: _NewsView(
-            loadingScreen: loadingScreen,
-            onSessionExpired: onSessionExpired,
-            onRedirectToDetailScreen: onRedirectToDetailScreen,
+    return BlocProvider(
+      create: (context) {
+        return NewsBloc(
+          newsService: NewsService(
+            apiToken: apiToken,
+            apiUrl: apiUrl,
+            preferences: preferences,
           ),
+        )..add(const GetNews());
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: _NewsView(
+          loadingScreen: loadingScreen,
+          onSessionExpired: onSessionExpired,
+          onRedirectToDetailScreen: onRedirectToDetailScreen,
         ),
       ),
     );

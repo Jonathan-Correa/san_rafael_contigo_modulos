@@ -1,3 +1,4 @@
+import 'package:csr_shared_modules/config/csr_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '/modules/news/models/new.dart';
@@ -7,22 +8,25 @@ import '/modules/news/models/news_response.dart';
 class NewsService {
   final String _apiUrl;
   final String _apiToken;
+  final CsrPreferences _preferences;
 
   const NewsService({
     required String apiUrl,
     required String apiToken,
+    required CsrPreferences preferences,
   })  : _apiToken = apiToken,
-        _apiUrl = apiUrl;
+        _apiUrl = apiUrl,
+        _preferences = preferences;
 
   Future<NewsResponse> getNews({
     int? roleId,
-    String? token,
     String filter = '',
     int page = 1,
     int count = 20,
   }) async {
     final customerRoleId = roleId != null ? '$roleId' : '';
-    final userToken = token ?? '';
+    final userToken = await _preferences.getToken();
+
     final headers = {
       'token': userToken,
       'Content-Type': 'application/json',
@@ -45,11 +49,11 @@ class NewsService {
     return NewsResponse.fromMap(body.data);
   }
 
-  Future<New> getNewById(int newId, String token) async {
+  Future<New> getNewById(int newId) async {
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': _apiToken,
-      'token': token
+      'token': await _preferences.getToken()
     };
 
     final uri = Uri.parse('$_apiUrl/news/$newId');

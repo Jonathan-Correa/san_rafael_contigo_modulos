@@ -11,7 +11,6 @@ class GetNews extends NewsEvent {
 
 class GetNewById extends NewsEvent {
   final int newId;
-  final String userToken;
 
-  const GetNewById(this.newId, this.userToken);
+  const GetNewById(this.newId);
 }
