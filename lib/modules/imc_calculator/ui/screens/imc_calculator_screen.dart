@@ -7,6 +7,7 @@ import 'package:csr_design_system/widgets/csr_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:csr_design_system/csr_design_system.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '/modules/imc_calculator/models/imc_indicator.dart';
 import '/modules/imc_calculator/logic/imc_bloc/imc_bloc.dart';
@@ -54,6 +55,8 @@ class _IMCCalculatorViewState extends State<_IMCCalculatorView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: ListView(
@@ -67,9 +70,24 @@ class _IMCCalculatorViewState extends State<_IMCCalculatorView> {
               child: _RadarIMC(),
             ),
           ),
-          const Align(
+          Align(
             alignment: Alignment.center,
-            child: Subtitle2('¿CÓMO INTERPRETAR TU IMC?'),
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+              ),
+              onPressed: () {
+                final url = Uri.parse(
+                  'https://www.cdc.gov/healthyweight/spanish/assessing/index.html#:~:text=Si%20su%20IMC%20es%20entre,dentro%20del%20rango%20de%20obesidad',
+                );
+
+                launchUrl(url);
+              },
+              child: const Subtitle2(
+                'MIRA AQUÍ CÓMO INTERPRETAR TU IMC',
+                color: Colors.white,
+              ),
+            ),
           ),
           const SizedBox(height: 10),
           const IMCCategories(),
