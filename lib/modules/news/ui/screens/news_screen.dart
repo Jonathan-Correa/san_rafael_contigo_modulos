@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:csr_design_system/widgets/csr_appbar.dart';
 
 import '/config/csr_preferences.dart';
 import '/widgets/error_message_widget.dart';
