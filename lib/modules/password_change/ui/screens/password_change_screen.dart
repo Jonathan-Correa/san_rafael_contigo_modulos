@@ -1,3 +1,4 @@
+import 'package:csr_shared_modules/modules/password_change/models/password_change_digits.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -220,33 +221,18 @@ class _EnterPasswordChangeCodeScreenState
     extends State<EnterPasswordChangeCodeScreen> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  late final TextEditingController _digit1;
-  late final TextEditingController _digit2;
-  late final TextEditingController _digit3;
-  late final TextEditingController _digit4;
-  late final TextEditingController _digit5;
-  late final TextEditingController _digit6;
+  late final PasswordChangeDigits _digitsControllers;
   bool isLoading = false;
 
   @override
   void initState() {
-    _digit1 = TextEditingController();
-    _digit2 = TextEditingController();
-    _digit3 = TextEditingController();
-    _digit4 = TextEditingController();
-    _digit5 = TextEditingController();
-    _digit6 = TextEditingController();
+    _digitsControllers = PasswordChangeDigits();
     super.initState();
   }
 
   @override
   void dispose() {
-    _digit1.dispose();
-    _digit2.dispose();
-    _digit3.dispose();
-    _digit4.dispose();
-    _digit5.dispose();
-    _digit6.dispose();
+    _digitsControllers.dispose();
     super.dispose();
   }
 
@@ -263,7 +249,7 @@ class _EnterPasswordChangeCodeScreenState
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Subtitle1(
-              'Ingresa el código de 6 digitos que hemos envíado a tu correo',
+              'Ingresa el código de 6 dígitos que hemos enviado a tu correo',
               center: true,
             ),
           ),
@@ -273,12 +259,16 @@ class _EnterPasswordChangeCodeScreenState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _Digit(controller: _digit1),
-                _Digit(controller: _digit2),
-                _Digit(controller: _digit3),
-                _Digit(controller: _digit4),
-                _Digit(controller: _digit5),
-                _Digit(controller: _digit6, isLast: true),
+                _Digit(digitsController: _digitsControllers, index: 0),
+                _Digit(digitsController: _digitsControllers, index: 1),
+                _Digit(digitsController: _digitsControllers, index: 2),
+                _Digit(digitsController: _digitsControllers, index: 3),
+                _Digit(digitsController: _digitsControllers, index: 4),
+                _Digit(
+                  digitsController: _digitsControllers,
+                  isLast: true,
+                  index: 5,
+                ),
               ],
             ),
           ),
@@ -298,14 +288,16 @@ class _EnterPasswordChangeCodeScreenState
               color: Theme.of(context).colorScheme.secondary,
               text: 'Envíar',
               onPressed: () {
-                if (!_isCodeComplete()) {
+                if (!_digitsControllers.isCodeComplete()) {
                   return csrErrorSnackBar(
                     context,
                     'El código debe estar completo',
                   );
                 }
 
-                context.read<PasswordChangeBloc>().add(ValidateCodeEvent(code));
+                context
+                    .read<PasswordChangeBloc>()
+                    .add(ValidateCodeEvent(_digitsControllers.getCode()));
               },
             ),
           )
@@ -313,34 +305,18 @@ class _EnterPasswordChangeCodeScreenState
       ),
     );
   }
-
-  bool _isCodeComplete() {
-    return _digit1.text.isNotEmpty &&
-        _digit2.text.isNotEmpty &&
-        _digit3.text.isNotEmpty &&
-        _digit4.text.isNotEmpty &&
-        _digit5.text.isNotEmpty &&
-        _digit6.text.isNotEmpty;
-  }
-
-  String get code {
-    return _digit1.text +
-        _digit2.text +
-        _digit3.text +
-        _digit4.text +
-        _digit5.text +
-        _digit6.text;
-  }
 }
 
 class _Digit extends StatelessWidget {
   const _Digit({
     Key? key,
-    required this.controller,
+    required this.digitsController,
+    required this.index,
     this.isLast = false,
   }) : super(key: key);
 
-  final TextEditingController controller;
+  final PasswordChangeDigits digitsController;
+  final int index;
   final bool isLast;
 
   static const errorBorder = OutlineInputBorder(
@@ -357,21 +333,23 @@ class _Digit extends StatelessWidget {
       width: inputSize,
       height: inputSize,
       child: TextField(
-        focusNode: FocusNode(),
+        focusNode: digitsController.digits[index].focusNode,
         onChanged: (value) {
-          if (value.length > 1) {
-            controller.text = value[0];
-          }
-
           if (value == '') {
-            FocusScope.of(context).previousFocus();
-          } else if (!isLast) {
-            FocusScope.of(context).nextFocus();
+            if (index - 1 >= 0) {
+              FocusScope.of(context).requestFocus(
+                digitsController.digits[index - 1].focusNode,
+              );
+            }
+          } else if (!isLast && index + 1 <= 5) {
+            FocusScope.of(context).requestFocus(
+              digitsController.digits[index + 1].focusNode,
+            );
           }
         },
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
-        controller: controller,
+        controller: digitsController.digits[index].controller,
         decoration: InputDecoration(
           fillColor: Theme.of(context).scaffoldBackgroundColor,
           enabledBorder: OutlineInputBorder(
