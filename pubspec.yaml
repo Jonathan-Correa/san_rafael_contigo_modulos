@@ -1,6 +1,6 @@
 name: csr_shared_modules
 description: Modulos compartidos Clínica San Rafael
-version: 0.1.2
+version: 0.1.3
 homepage:
 publish_to: "none"
 
